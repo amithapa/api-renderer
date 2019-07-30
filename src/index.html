@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>API Renderer</title>
+		<link rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <!-- <link rel="stylesheet" href="styles/debug.css"> -->
+        <style>
+            .customselect {
+                width: 100%;
+            }
+        </style>
+	</head>
+	<body>
+           
+         
+            <!-- <textarea class="textarea is-warning" placeholder="Warning textarea"></textarea> -->
+            <section class="hero">
+                <div class="hero-body">
+                   <div class="columns is-multiline">
+                        <div class="column is-full">
+                            <h4 id="urls" class="title is-5 is-spaced bd-anchor-title">
+                                <span class="bd-anchor-name">
+                                    URL
+                                </span>
+                            </h4>
+                            <div class="control">
+                                    <input class="input" id="url" type="text" placeholder="http://www.example.com">
+                            </div>
+                        </div>
+
+                        <div class="column is-half">
+                            <h4 id="Paramaters" class="title is-5 is-spaced bd-anchor-title">
+                                <span class="bd-anchor-name">
+                                    Parameters
+                                </span>
+                            </h4>
+                            <textarea class="textarea" id="parameters" placeholder='{"example_id": "1"}'></textarea>
+                        </div>
+
+                        <div class="column is-half">
+                            <h4 id="Paramaters" class="title is-5 is-spaced bd-anchor-title">
+                                <span class="bd-anchor-name">
+                                    Request Type
+                                </span>
+                            </h4>
+                            <div class="control has-icons-left">
+                                    <div class="select customselect">
+                                      <select class="customselect" id="request_type">
+                                        <option selected value="get">Get</option>
+                                        <option value="post">Post</option>
+                                        <option value="head">Head</option>
+                                        <option value="put">put</option>
+                                        <option value="delete">Delete</option>
+                                      </select>
+                                    </div>
+                                    <div class="icon is-small is-left">
+                                      <i class="fas fa-globe"></i>
+                                    </div>
+                                  </div>
+                        </div>
+                        <div class="column">
+                            <div class="control">
+                                <button class="button is-primary">Submit</button>
+                            </div>
+                        </div>
+                    <div class="column is-full">
+                        <pre id="response"></pre>
+                    </div>
+                   </div>
+                </div>
+            </section>
+            <script>
+            $(document).ready(function(){
+                $("button").click(function(){
+                    var server_url = "http://localhost:3000/custom_api";
+                    var url = document.getElementById("url").value;
+                    var request_type = document.getElementById("request_type").value;
+                    var parameters = document.getElementById("parameters").value;
+                    if (parameters == "") {
+                        parameters = "{}";
+                    }
+                    // alert(parameters);
+                    try {
+                        JSON.parse(parameters);
+                    } catch (e) {
+                        alert("Invalid parameters.");
+                        return false;
+                    }
+                    
+                    $.post(server_url, {
+                        "request_type": request_type,
+                        "parameters": parameters,
+                        "url": url,
+                    },function(data, status){
+                        document.getElementById("response").innerHTML = JSON.stringify(data, undefined, 4);
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
